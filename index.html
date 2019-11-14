@@ -64,9 +64,34 @@
 			DuckBeakMesh.position.set(duckX-3,duckY+2.3,duckZ);
 			DuckBeakMesh.updateMatrix();
 
-			scene.add(DuckHeadMesh);
-			scene.add(DuckBodyMesh);
-			scene.add(DuckBeakMesh);
+
+			function makeDuckInstance(geometry, geometry2,color, x)
+			{
+				const material = new THREE.MeshPhongMaterial({color});
+
+				const cube = new THREE.Mesh(geometry, material);
+				const cube2 = new THREE.Mesh(geometry2, material);
+				scene.add(cube);
+				scene.add(cube2);
+
+				cube.position.x = x;
+
+			}
+
+			const Ducks = 
+			[
+				makeDuckInstance(DuckHead, DuckBody, 0x44aa88, 0),
+			];
+
+
+
+
+
+
+
+
+
+
 			
 
 			function render(time)
