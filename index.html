@@ -1,0 +1,154 @@
+<html>
+	<head>
+		<style>
+			html,body
+			{
+				margin: 0;
+				height: 100%;
+
+			}
+			#c
+			{
+
+				height: 100%;
+				width:100%;
+				display: block;
+			}
+
+		</style>
+	</head>
+	<body> 
+		<canvas id="c"></canvas>	
+		<script type="module">
+		import * as THREE from './resources/threejs/three.module.js';
+		import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/controls/OrbitControls.js';
+		function main()
+		{
+			const canvas = document.querySelector('#c');
+			const renderer = new THREE.WebGLRenderer({canvas});
+			
+			const fov = 75;
+			const aspect = 2;
+			const near = 0.1;
+			const far = 100;
+			
+			const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+			camera.position.set(0,-2,15);
+			
+			const scene = new THREE.Scene();
+			
+
+			
+			
+			const greenMaterial = new THREE.MeshPhongMaterial({color: 0x004E00});
+			const brownMaterial = new THREE.MeshPhongMaterial({color: 0xA66829});
+			const yellowMaterial = new THREE.MeshPhongMaterial({color: 0xF59B00});
+
+
+			//duck geometry
+
+			const duckX =0,duckY =1.5,duckZ =0;	
+
+			const DuckHead = new THREE.BoxGeometry(2,2,2);
+			const DuckHeadMesh = new THREE.Mesh(DuckHead,greenMaterial);
+			DuckHeadMesh.position.set(duckX-2,duckY+2.5,duckZ);
+			DuckHeadMesh.updateMatrix();
+
+			const DuckBody = new THREE.BoxGeometry(4,3,3);
+			const DuckBodyMesh = new THREE.Mesh(DuckBody,brownMaterial);
+			DuckBodyMesh.position.set(duckX,duckY,duckZ);
+			DuckBodyMesh.updateMatrix();
+
+			const DuckBeak = new THREE.BoxGeometry(2.5,0.5,1);
+			const DuckBeakMesh = new THREE.Mesh(DuckBeak,yellowMaterial);
+			DuckBeakMesh.position.set(duckX-3,duckY+2.3,duckZ);
+			DuckBeakMesh.updateMatrix();
+
+			scene.add(DuckHeadMesh);
+			scene.add(DuckBodyMesh);
+			scene.add(DuckBeakMesh);
+			
+
+			function render(time)
+			{
+				time *= 0.001;
+				
+				const speed =  1 + ndx *.1;
+
+				DuckHeadMesh.position.setX = speed;
+				
+				renderer.render(scene,camera);
+
+				requestAnimationFrame(render);
+			}
+			requestAnimationFrame(render);
+
+
+
+
+
+			
+			
+			
+			
+			
+			
+			
+			scene.background = new THREE.Color('lightblue');
+
+			{
+				const color = 0xFFFFFF;
+				const intensity = 1;
+				const light = new THREE.DirectionalLight(color,intensity);
+				light.position.set(-1,2,2);
+				scene.add(light);
+			}
+
+			const controls = new OrbitControls(camera, canvas);
+			controls.target.set(0,5,0);
+			controls.update();
+
+			
+			
+			 
+			
+			 
+
+
+
+			function resizeRendererToDisplaySize(renderer) 
+			{
+                const canvas = renderer.domElement;
+                const width = canvas.clientWidth;
+                const height = canvas.clientHeight;
+                const needResize = canvas.width !== width || canvas.height !== height;
+                if (needResize) {
+                  renderer.setSize(width, height, false);
+                }
+                return needResize;
+              }
+            
+			  function render() 
+			  {
+            
+                if (resizeRendererToDisplaySize(renderer)) {
+                  const canvas = renderer.domElement;
+                  camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                  camera.updateProjectionMatrix();
+                }
+            
+                renderer.render(scene, camera);
+            
+                requestAnimationFrame(render);
+              }
+            
+              requestAnimationFrame(render);
+            }
+            
+            main();
+
+		
+
+		</script>
+	</body>
+</html>
