@@ -25,7 +25,7 @@
 		//import {TrackballControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/controls/TrackballControls.js';
 
 		import {OBJLoader2} from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/loaders/OBJLoader2.js';
-
+		import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/loaders/GLTFLoader.js';
 		function main()
 		{
 			const canvas = document.querySelector('#c');
@@ -42,66 +42,17 @@
 			const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 			camera.position.set(CamX,camY,camZ);
 			
+			const controls = new OrbitControls(camera, canvas);
+			controls.target.set(0,5,0);
+			controls.update();
+			
 			const scene = new THREE.Scene();
 			
 
 			
-			
-			const greenMaterial = new THREE.MeshPhongMaterial({color: 0x004E00});
-			const brownMaterial = new THREE.MeshPhongMaterial({color: 0xA66829});
-			const yellowMaterial = new THREE.MeshPhongMaterial({color: 0xF59B00});
 
 
-			//duck geometry
-	
-
-			const DuckHead = new THREE.BoxGeometry(2,2,2);
-			const DuckHeadMesh = new THREE.Mesh(DuckHead,greenMaterial);
-			//DuckHeadMesh.position.set(duckX-2,duckY+2.5,duckZ);
-			//DuckHeadMesh.updateMatrix();
-
-			const DuckBody = new THREE.BoxGeometry(4,3,3);
-			const DuckBodyMesh = new THREE.Mesh(DuckBody,brownMaterial);
-			//DuckBodyMesh.position.set(duckX,duckY,duckZ);
-			//DuckBodyMesh.updateMatrix();
-
-			const DuckBeak = new THREE.BoxGeometry(2.5,0.5,1);
-			const DuckBeakMesh = new THREE.Mesh(DuckBeak,yellowMaterial);
-			//DuckBeakMesh.position.set(duckX-3,duckY+2.3,duckZ);
-			//DuckBeakMesh.updateMatrix();
-
-
-			/*function makeDuckInstance(DuckHead, DuckBody, DuckBeak, Headmaterial, Bodymaterial, Beakmaterial,x,y,z)
-              		{
-                		const DuckHeadMesh = new THREE.Mesh(DuckHead, Headmaterial);
-                		const DuckBodyMesh = new THREE.Mesh(DuckBody, Bodymaterial);
-                		const DuckBeakMesh = new THREE.Mesh(DuckBeak, Beakmaterial);
-                		scene.add(DuckHeadMesh,DuckBodyMesh,DuckBeakMesh);
-                		DuckHeadMesh.position.x = x-2;
-						DuckHeadMesh.position.y = y+1;
-						DuckHeadMesh.position.z = z;
-						DuckBeakMesh.position.x = x-3;
-						DuckBeakMesh.position.y = y+0.6;
-						DuckBeakMesh.position.z = z;
-						DuckBodyMesh.position.x = x;
-						DuckBodyMesh.position.y = y-1.5;
-						DuckBodyMesh.position.z = z;
-						
-						
-						return DuckBodyMesh;
-
-	               }
-			const Ducks = 
-              		[
-                		makeDuckInstance(DuckHead, DuckBody, DuckBeak, greenMaterial,brownMaterial, yellowMaterial, 11,21.5,-10),
-						makeDuckInstance(DuckHead,DuckBody, DuckBeak, brownMaterial, greenMaterial,yellowMaterial, 1,23.5,-10),
-						makeDuckInstance(DuckHead,DuckBody, DuckBeak, brownMaterial, greenMaterial,yellowMaterial, -11,20.5,-10),
-              		];
-			*/
-			
-	
-			//scene.add(square);
-			const geometry = new THREE.BoxGeometry(5,5,5);	   
+			/*const geometry = new THREE.BoxGeometry(5,5,5);	   
 
 			function makeInstance(geometry, color, x,y)
 			{
@@ -121,14 +72,34 @@
 				makeInstance(geometry, 0x8844aa,-50,0),
 				makeInstance(geometry, 0xaa8844,-35,10),
 
-			];
+			];*/
 		
 
+			//import parrot
+			const gltfLoader = new GLTFLoader();
+			const url = './resources/models/Parrot.glb';
+			var parrot = new THREE.Object3D();
+			let mixer;
+			gltfLoader.load(url, function(gltf)
+			{
+				parrot = gltf.scene;
+				mixer = new THREE.AnimationMixer ( parrot );
 
-
-
+				gltf.animations.forEach((clip) =>
+				{
+					mixer.clipAction(clip).play();
+				})
+				parrot.position.set(0,5,0);
+				parrot.scale.set(0.12,0.12,0.12);
+				parrot.rotation.set(0,Math.PI*0.5,0);
+				
+				scene.add(parrot);
+				
+			});
 
 			
+
+		
 
 
 
@@ -172,11 +143,7 @@
     			mesh.rotation.x = Math.PI * -.5;
     			scene.add(mesh);
   			}
-			const controls = new OrbitControls(camera, canvas);
-			//controls.target.set(0,0,0);
-			controls.target.set(0,5,0);
 
-			controls.update();
 
 
 			
@@ -198,18 +165,24 @@
                 }
                 return needResize;
             }
-            
-			  function render(time,) 
+			let then = 0;
+			  function render(time) 
 			  {
 				
 				time *= 0.001;
-				
-				
+				const deltaTime = time - then;
+				then = time;
+				mixer.update(deltaTime);
+				parrot.position.x += 0.2;
+				while(parrot.position.x > 50)
+				{
+					parrot.position.x += -100;
+				}
 				//cube.position.set.x = camX +=time*0.05;
 				
 				//camera.position.x += time ;
 
-				cubes.forEach((cube,ndx)=>
+				/*cubes.forEach((cube,ndx)=>
 				{
 					const speed = 1 + ndx*0.1;
 					const rot = time *speed;
@@ -225,7 +198,7 @@
 					}
 
 
-				});
+				});*/
 
 
 
@@ -244,7 +217,7 @@
               requestAnimationFrame(render);
 			  
             }
-            
+
             main();
 
 		
