@@ -89,7 +89,7 @@
 				{
 					mixer.clipAction(clip).play();
 				})
-				parrot.position.set(0,5,0);
+				parrot.position.set(0,12,0);
 				parrot.scale.set(0.12,0.12,0.12);
 				parrot.rotation.set(0,Math.PI*0.5,0);
 				
@@ -126,12 +126,12 @@
     			const planeSize = 40;
 
     			const loader = new THREE.TextureLoader();
-    			const texture = loader.load('https://threejsfundamentals.org/threejs/resources/images/checker.png');
+    			const texture = loader.load('./resources/textures/grass.png');
     			texture.wrapS = THREE.RepeatWrapping;
     			texture.wrapT = THREE.RepeatWrapping;
     			texture.magFilter = THREE.NearestFilter;
-    			const repeats = planeSize / 2;
-    			texture.repeat.set(repeats, repeats);
+    			const repeats = planeSize/12;
+    			texture.repeat.set(repeats*2, repeats);
 
     			const planeGeo = new THREE.PlaneBufferGeometry(planeSize*2, planeSize);
     			const planeMat = new THREE.MeshPhongMaterial
