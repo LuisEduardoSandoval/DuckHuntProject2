@@ -94,7 +94,7 @@
 				{
 					mixer.clipAction(clip).play();
 				})
-				parrot.position.set(0,12,-25);
+				parrot.position.set(0,32,-45);
 				parrot.scale.set(0.12,0.12,0.12);
 				parrot.rotation.set(0,Math.PI*0.5,0);
 				
@@ -124,7 +124,7 @@
 				const color = 0xFFFFFF;
 				const intensity = 1;
 				const light = new THREE.DirectionalLight(color,intensity);
-				light.position.set(-1,2,2);
+				light.position.set(-1,2,5);
 				scene.add(light);
 			
 			
@@ -198,7 +198,8 @@
 				//wireframe: true,
 				vertexColors: THREE.VertexColors,
 			});
-			const geometry = new THREE.PlaneGeometry(120,50,20,9);
+			const geometryWidth = 120, geometryHeight = 50;
+			const geometry = new THREE.PlaneGeometry(geometryWidth,geometryHeight,20,9);
 			const plane = new THREE.Mesh(geometry, material);
 			//plane geometry
 			for(var i = 0, l = geometry.vertices.length; i <l; i +=4)
@@ -237,8 +238,108 @@
 
 			plane.rotation.x = -Math.PI/2;
 			scene.add(plane);
-	
 			
+			
+			//grass
+
+
+
+			/*const grassMaterial = new THREE.MeshPhongMaterial
+			({
+				color: 0x346700,
+
+				wireframe: true,
+				//vertexColors: THREE.VertexColors,
+				transparent: true
+			});*/
+			const grassMaterial = new THREE.MeshBasicMaterial({color: 0x346700});
+			const grassDarkMaterial = new THREE.MeshBasicMaterial({color: 0x003500});
+			
+			
+			const grassGeometry = new THREE.Geometry();
+			grassGeometry.vertices.push
+			(
+				new THREE.Vector3(-1, -1,  1),  // 0
+  				new THREE.Vector3(-0.2, -1,  1),  // 1
+  				new THREE.Vector3(-1,  1,  1),  // 2
+  				new THREE.Vector3(-0.2,  1,  1),  // 3
+				new THREE.Vector3(-1,  2,  1), //4 
+				
+				
+
+			);
+			grassGeometry.faces.push
+			(
+			
+				new THREE.Face3(0, 3, 2),
+  				new THREE.Face3(0, 1, 3),
+				new THREE.Face3(2,3,4),
+			);
+			const grassGeometryDark = new THREE.Geometry();
+			
+			//grass geometry 2
+			grassGeometryDark.vertices.push
+			(
+				new THREE.Vector3(0, -1,  1),  // 0
+  				new THREE.Vector3( 0.5, -1,  1),  // 1
+  				new THREE.Vector3(0,  1,  1),  // 2
+  				new THREE.Vector3( 0.5,  1,  1),  // 3
+				new THREE.Vector3(0,  2,  1), //4 
+			);
+			grassGeometryDark.faces.push
+			(
+				new THREE.Face3(0,3,2),
+				new THREE.Face3(0,1,3),
+				new THREE.Face3(2,3,4),
+				
+
+			);
+			
+			
+
+
+			for(i = -geometryWidth/2;i <geometryWidth/2 ;i+=0.25 ) //bounds width/2 due to origin being 0
+			{
+				const grassMesh = new THREE.Mesh(grassGeometry,grassMaterial);
+				grassMesh.position.y = 0.6;
+				grassMesh.position.z = -25;
+				grassMesh.position.x =i+=1.2;
+				
+				
+				const grassMeshDark = new THREE.Mesh(grassGeometryDark,grassDarkMaterial);
+
+				
+				grassMeshDark.position.y = 0.4;
+				grassMeshDark.position.z = -25;
+				grassMeshDark.position.x =i-0.2;
+
+
+				scene.add(grassMesh);
+
+				scene.add(grassMeshDark);
+			}
+			for(i = -geometryWidth/2;i <geometryWidth/2 ;i+=0.75) //bounds width/2 due to origin being 0
+			{
+				const grassMesh = new THREE.Mesh(grassGeometry,grassMaterial);
+				grassMesh.position.y = 0.2;
+				grassMesh.position.z = -24;
+				grassMesh.position.x =i+=1.2;
+				
+				
+				const grassMeshDark = new THREE.Mesh(grassGeometryDark,grassDarkMaterial);
+
+				
+				grassMeshDark.position.y = 0.0;
+				grassMeshDark.position.z = -24;
+				grassMeshDark.position.x =i-0.2;
+
+
+				scene.add(grassMesh);
+
+				scene.add(grassMeshDark);
+			}
+
+
 			 
 			
 			 
@@ -265,13 +366,13 @@
 				then = time;
 				mixer.update(deltaTime);
 				parrot.position.x += 0.2;
-				while(parrot.position.x > 70)
+				while(parrot.position.x > 100)
 				{
-					parrot.position.x += -150;
+					parrot.position.x += -200;
 				}
 				//cube.position.set.x = camX +=time*0.05;
 				
-				light.position.x += 0.01;
+				//light.position.x += 0.01;
 				while(light.position.x > 10)
 				{
 					light.position.x += -15;
