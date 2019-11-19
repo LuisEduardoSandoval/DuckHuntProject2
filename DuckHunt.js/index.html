@@ -122,7 +122,11 @@
 				light.position.set(-1,2,2);
 				scene.add(light);
 			}
-			{
+			
+			
+			
+			//plane geometry
+			/*{
     			const planeSize = 40;
 
     			const loader = new THREE.TextureLoader();
@@ -142,11 +146,78 @@
     			const mesh = new THREE.Mesh(planeGeo, planeMat);
     			mesh.rotation.x = Math.PI * -.5;
     			scene.add(mesh);
-  			}
+  			}*/
+			
+			//custom geometry
+			/*var material = new THREE.MeshPhongMaterial( { color : 0xFFFFFF } );
+			const geometry = new THREE.Geometry();
+			
+			
+				geometry.vertices.push
+				(
+					new THREE.Vector3( -1,  -1, 1 ),
+					new THREE.Vector3( 1, -1, 1 ),
+					new THREE.Vector3(  1, -1, -1 ),
+				);
+				geometry.faces.push(new THREE.Face3(0,1,2));
+				geometry.faces.push(new THREE.Face3(0,2,3));
+				geometry.computeBoundingBox();
+				const geometryMesh = new THREE.Mesh(geometry,material);
+				geometryMesh.position.y = 3;
+			
+			  
 
 
+			scene.add( geometryMesh);
+			*/
 
 			
+			//(width, height, widthSegment, heightSegment)
+			const material = new THREE.MeshPhongMaterial({
+				color: 0x006700,
+				//wireframe: true,
+				vertexColors: THREE.VertexColors,
+			});
+			const geometry = new THREE.PlaneGeometry(120,50,20,9);
+			const plane = new THREE.Mesh(geometry, material);
+			//plane geometry
+			for(var i = 0, l = geometry.vertices.length; i <l; i +=4)
+			{
+				geometry.vertices[i].z = 1;
+				
+			}
+			for(var i = 0, l = geometry.vertices.length; i <l; i +=3)
+			{
+				geometry.vertices[i].z = 1.1;
+				
+			}
+			
+			for(var i = 0, l = geometry.vertices.length; i <l; i +=5)
+			{
+				geometry.vertices[i].z = 1.2;
+		
+
+
+			}
+			//face colors
+			for(var i = 0; i < geometry.faces.length; i += 4) 
+			{
+				var face = geometry.faces[i];
+				face.vertexColors[0] = new THREE.Color(0xcccccc);
+				face.vertexColors[1] = new THREE.Color(0xcccccc);
+				face.vertexColors[2] = new THREE.Color(0xe5e5e5);
+			}
+			for(var i = 0; i < geometry.faces.length; i += 3)
+			{
+				var face = geometry.faces[i];
+				face.vertexColors[0] = new THREE.Color(0xcccccc);
+				face.vertexColors[1] = new THREE.Color(0xe5e5e5);
+				face.vertexColors[2] = new THREE.Color(0xcccccc);
+			}
+
+			plane.rotation.x = -Math.PI/2;
+			scene.add(plane);
+	
 			
 			 
 			
