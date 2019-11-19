@@ -13,6 +13,7 @@
 				height: 100%;
 				width:100%;
 				display: block;
+
 			}
 
 		</style>
@@ -29,7 +30,11 @@
 		function main()
 		{
 			const canvas = document.querySelector('#c');
-			const renderer = new THREE.WebGLRenderer({canvas});
+			const renderer = new THREE.WebGLRenderer
+			({
+				canvas,
+				alpha: true,
+			});
 
 
 			const fov = 75;
@@ -89,7 +94,7 @@
 				{
 					mixer.clipAction(clip).play();
 				})
-				parrot.position.set(0,12,0);
+				parrot.position.set(0,12,-25);
 				parrot.scale.set(0.12,0.12,0.12);
 				parrot.rotation.set(0,Math.PI*0.5,0);
 				
@@ -113,17 +118,32 @@
 			
 			
 			
-			
+			//const light = new THREE.DirectionalLight();
 			scene.background = new THREE.Color('lightblue');
-			{
+			
 				const color = 0xFFFFFF;
 				const intensity = 1;
 				const light = new THREE.DirectionalLight(color,intensity);
 				light.position.set(-1,2,2);
 				scene.add(light);
+			
+			
+			//background image
+			{
+			
+				const loader = new THREE.TextureLoader();
+				const bgTexture = loader.load('./resources/textures/sky.png');
+				scene.background = bgTexture;
+				scene.background.fog;
+			
 			}
-			
-			
+
+
+
+
+
+
+
 			
 			//plane geometry
 			/*{
@@ -174,7 +194,7 @@
 			
 			//(width, height, widthSegment, heightSegment)
 			const material = new THREE.MeshPhongMaterial({
-				color: 0x006700,
+				color: 0x346700,
 				//wireframe: true,
 				vertexColors: THREE.VertexColors,
 			});
@@ -245,13 +265,17 @@
 				then = time;
 				mixer.update(deltaTime);
 				parrot.position.x += 0.2;
-				while(parrot.position.x > 50)
+				while(parrot.position.x > 70)
 				{
-					parrot.position.x += -100;
+					parrot.position.x += -150;
 				}
 				//cube.position.set.x = camX +=time*0.05;
 				
-				//camera.position.x += time ;
+				light.position.x += 0.01;
+				while(light.position.x > 10)
+				{
+					light.position.x += -15;
+				}
 
 				/*cubes.forEach((cube,ndx)=>
 				{
